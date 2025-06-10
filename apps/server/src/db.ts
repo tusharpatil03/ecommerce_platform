@@ -4,7 +4,7 @@ import { checkReplicaSet } from "./utilities/checkReplicaSet";
 
 let session: mongoose.ClientSession;
 
-export const connect = async (dbName = "test") => {
+export const connect = async (dbName = "ecom") => {
     if (mongoose.connection.readyState !== 0) {
         return
     }

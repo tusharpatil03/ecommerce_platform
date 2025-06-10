@@ -1,6 +1,8 @@
 import express from "express";
 import "dotenv/config";
 import { connect } from "./db"
+import userRouter from "./routes/user";
+
 const app = express();
 
 app.use(express.json());
@@ -13,7 +15,7 @@ app.get("/hello", (req, res) => {
     });
 });
 
-export default app;
+app.use("/user", userRouter)
 
 const SERVER_PORT = process.env.SERVER_PORT;
 const SERVER_HOST = process.env.SERVER_HOST;
