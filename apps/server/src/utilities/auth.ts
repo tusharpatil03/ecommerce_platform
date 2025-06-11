@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../globals";
-interface JwtPayload {
+
+export interface JwtPayload {
   userId: string;
   email: string;
 }

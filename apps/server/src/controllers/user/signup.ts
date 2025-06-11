@@ -3,14 +3,19 @@ import { User } from "../../models/User";
 import bcrypt from "bcrypt";
 import { generateJwtToken } from "../../utilities/auth";
 import HandleError from "../../utilities/Error/Error";
-type SignupInfo = {
+
+export type SignupInfo = {
   email: string;
   password: string;
-};
+} | null;
+
 export const signup = async (req: Request, res: Response): Promise<void> => {
   const data: SignupInfo = req.body;
 
   try {
+    if (!data || !data.email || !data.password) {
+      throw new HandleError("VALIDATION ERROR", "invalid input", 400);
+    }
     const existingUser = await User.findOne({
       email: data.email,
     });
