@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 export const checkReplicaSet = async (): Promise<boolean> => {
   try {
     const adminDb = mongoose.connection.db?.admin();
@@ -11,12 +11,13 @@ export const checkReplicaSet = async (): Promise<boolean> => {
       return false;
     }
 
-    if ("hosts" in result && "setName" in result) {
+    if ('hosts' in result && 'setName' in result) {
       return true;
     } else {
       return false;
     }
   } catch (e) {
-    throw new Error("Error in checking replica set");
+    console.log(e);
+    throw new Error('Error in checking replica set');
   }
 };

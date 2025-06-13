@@ -1,21 +1,32 @@
-import express from "express";
-import "dotenv/config";
-import { connect } from "./db";
-import userRouter from "./routes/user";
+import express from 'express';
+import 'dotenv/config';
+import { connect } from './db';
+import userRouter from './routes/user';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/hello", (req, res) => {
+app.use(
+  cors({
+    origin: '*',
+    credentials: true,
+  }),
+);
+
+app.use(cookieParser());
+
+app.get('/hello', (req, res) => {
   res.json({
-    message: "Hello",
+    message: 'Hello',
     status: 200,
   });
 });
 
-app.use("/user", userRouter);
+app.use('/user', userRouter);
 
 const SERVER_PORT = process.env.SERVER_PORT;
 const SERVER_HOST = process.env.SERVER_HOST;

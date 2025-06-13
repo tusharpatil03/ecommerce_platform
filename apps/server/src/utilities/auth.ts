@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../globals";
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../globals';
 
 export interface JwtPayload {
   userId: string;
@@ -15,7 +15,7 @@ export const generateJwtToken = (payload: JwtPayload) => {
     },
     JWT_SECRET as string,
     {
-      expiresIn: "1d",
+      expiresIn: '1d',
     },
   );
   return token;

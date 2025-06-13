@@ -1,12 +1,12 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   email: {
     type: String,
-    required: [true, "Please enter your Email Id"],
-    maxLength: [40, "Email can not exceed 40 charactors"],
+    required: [true, 'Please enter your Email Id'],
+    maxLength: [40, 'Email can not exceed 40 charactors'],
     unique: true,
   },
 
@@ -28,4 +28,4 @@ const userSchema = new Schema({
   },
 });
 
-export const User = mongoose.model("User", userSchema);
+export const User = mongoose.model('User', userSchema);

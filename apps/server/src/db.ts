@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
-import { DATABASE_URL } from "./globals";
-import { checkReplicaSet } from "./utilities/checkReplicaSet";
+import mongoose from 'mongoose';
+import { DATABASE_URL } from './globals';
+import { checkReplicaSet } from './utilities/checkReplicaSet';
 
 let session: mongoose.ClientSession;
 
-export const connect = async (dbName = "ecom") => {
+export const connect = async (dbName = 'ecom') => {
   if (mongoose.connection.readyState !== 0) {
     return;
   }
@@ -13,10 +13,10 @@ export const connect = async (dbName = "ecom") => {
     await mongoose.connect(DATABASE_URL as string, { dbName });
     const isReplicaSet = await checkReplicaSet();
     if (isReplicaSet) {
-      console.log("Session started --> Connected to a replica set!");
+      console.log('Session started --> Connected to a replica set!');
       session = await mongoose.startSession();
     } else {
-      console.log("Session not started --> Not Connected to a replica set!");
+      console.log('Session not started --> Not Connected to a replica set!');
     }
   } catch (e: unknown) {
     if (e instanceof Error) {
@@ -24,3 +24,14 @@ export const connect = async (dbName = "ecom") => {
     }
   }
 };
+
+export const disconnect = async (): Promise<void> => {
+  if (mongoose.connection.readyState === 0) {
+    console.warn('No Active Database connection');
+    return;
+  }
+  session?.endSession();
+  await mongoose.connection.close();
+};
+
+export { session };
