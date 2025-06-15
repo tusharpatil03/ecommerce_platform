@@ -1,8 +1,12 @@
 import { Request, Response } from 'express';
 import { User } from '../../models/User';
 import bcrypt from 'bcrypt';
-import { generateJwtToken } from '../../utilities/auth';
 import HandleError from '../../utilities/Error/Error';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  InterfaceJwtPayload,
+} from '../../utilities/auth';
 
 export type SignupInfo = {
   email: string;
@@ -36,10 +40,27 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       throw new HandleError('User Not Exist', 'Unable to Create User', 500);
     }
 
-    const email = 'tush@gmail.com';
-    const id = '1234';
+    const JwtPayload: InterfaceJwtPayload = {
+      email: data.email,
+      userId: user.id,
+    };
 
-    const accessToken = generateJwtToken({ email, userId: id });
+    const accessToken = generateAccessToken(JwtPayload);
+    const refreshToken = generateRefreshToken(JwtPayload);
+
+    if (!accessToken || !refreshToken) {
+      throw new HandleError('JWT ERROR', 'unable to create JWT tokens', 500);
+    }
+
+    await User.updateOne(
+      {
+        id: user.id,
+      },
+      {
+        token: refreshToken,
+        $inc: { token_version: 1 },
+      },
+    );
 
     res.cookie('token', accessToken, {
       domain: 'localhost',
@@ -49,8 +70,8 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     });
 
     res.status(201).json({
-      token: accessToken,
-      success: true,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     });
   } catch (e) {
     console.error(e);
