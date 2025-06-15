@@ -8,11 +8,8 @@ import { Request, Response } from 'express';
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   const data: SignupInfo = req.body;
-  console.log(req.body);
+
   try {
-    if (!data || !data.email || !data.password) {
-      throw new HandleError('VALIDATION ERROR', 'invalid input', 400);
-    }
     const user = await User.findOne({
       email: data.email,
     }).select('password');
