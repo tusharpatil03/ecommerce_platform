@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { DATABASE_URL } from './globals';
-import { checkReplicaSet } from './utilities/checkReplicaSet';
+import { checkReplicaSet } from './utils/checkReplicaSet';
 
 let session: mongoose.ClientSession;
 

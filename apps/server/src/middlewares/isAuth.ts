@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt, { VerifyErrors } from 'jsonwebtoken';
 import { ACCESS_TOKEN_SECRET } from '../globals';
-import HandleError from '../utilities/Error/Error';
+import HandleError from '../utils/Error/Error';
 
 export const isAuth = async (
   req: Request,

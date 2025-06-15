@@ -1,11 +1,11 @@
 import { SignupInfo } from './signup';
 import { User } from '../../models/User';
-import HandleError from '../../utilities/Error/Error';
+import HandleError from '../../utils/Error/Error';
 import {
   generateAccessToken,
   generateRefreshToken,
   InterfaceJwtPayload,
-} from '../../utilities/auth';
+} from '../../utils/auth';
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 

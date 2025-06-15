@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import { User } from '../../models/User';
 import bcrypt from 'bcrypt';
-import HandleError from '../../utilities/Error/Error';
+import HandleError from '../../utils/Error/Error';
 import {
   generateAccessToken,
   generateRefreshToken,
   InterfaceJwtPayload,
-} from '../../utilities/auth';
+} from '../../utils/auth';
 
 export type SignupInfo = {
   email: string;
