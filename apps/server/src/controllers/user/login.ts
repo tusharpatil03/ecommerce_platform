@@ -1,8 +1,11 @@
 import { SignupInfo } from './signup';
 import { User } from '../../models/User';
 import HandleError from '../../utilities/Error/Error';
-import { generateJwtToken } from '../../utilities/auth';
-import { JwtPayload } from '../../utilities/auth';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  InterfaceJwtPayload,
+} from '../../utilities/auth';
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 
@@ -27,12 +30,27 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       throw new HandleError('Wrong Password', 'Incorrect Password', 400);
     }
 
-    const JwtPayload: JwtPayload = {
+    const JwtPayload: InterfaceJwtPayload = {
       email: data.email,
       userId: user.id,
     };
 
-    const accessToken = generateJwtToken(JwtPayload);
+    const accessToken = generateAccessToken(JwtPayload);
+    const refreshToken = generateRefreshToken(JwtPayload);
+
+    if (!accessToken || !refreshToken) {
+      throw new HandleError('JWT ERROR', 'unable to create JWT tokens', 500);
+    }
+
+    await User.updateOne(
+      {
+        id: user.id,
+      },
+      {
+        token: refreshToken,
+        $inc: { token_version: 1 },
+      },
+    );
 
     res.cookie('token', accessToken, {
       domain: 'localhost',
@@ -43,7 +61,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({
       message: 'login success',
-      token: accessToken,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     });
   } catch (e: unknown | HandleError) {
     console.log(e);

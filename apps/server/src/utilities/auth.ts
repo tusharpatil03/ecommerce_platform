@@ -1,22 +1,39 @@
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../globals';
+import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '../globals';
 
-export interface JwtPayload {
+export interface InterfaceJwtPayload {
   userId: string;
   email: string;
 }
-export const generateJwtToken = (payload: JwtPayload) => {
-  const token = jwt.sign(
+export const generateAccessToken = (payload: InterfaceJwtPayload): string => {
+  const token: string = jwt.sign(
     {
       data: {
         email: payload.email,
         userId: payload.userId,
       },
     },
-    JWT_SECRET as string,
+    ACCESS_TOKEN_SECRET as string,
     {
-      expiresIn: '1d',
+      expiresIn: 30 * 60 * 1000,
     },
   );
+  return token;
+};
+
+export const generateRefreshToken = (payload: InterfaceJwtPayload): string => {
+  const token: string = jwt.sign(
+    {
+      data: {
+        email: payload.email,
+        userId: payload.userId,
+      },
+    },
+    REFRESH_TOKEN_SECRET as string,
+    {
+      expiresIn: '30d',
+    },
+  );
+
   return token;
 };
