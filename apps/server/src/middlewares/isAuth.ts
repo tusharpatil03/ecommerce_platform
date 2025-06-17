@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt, { VerifyErrors } from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { ACCESS_TOKEN_SECRET } from '../globals';
 import HandleError from '../utils/Error/Error';
 
@@ -9,26 +9,23 @@ export const isAuth = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const token = req.cookies.token;
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
     if (!token) {
       return next(
         new HandleError('UNAUTHORIZED ERROR', 'No token provided', 401),
       );
     }
 
-    jwt.verify(
+    const decoded: JwtPayload = jwt.verify(
       token,
       ACCESS_TOKEN_SECRET as string,
-      (err: VerifyErrors | null, decoded: any) => {
-        if (err) {
-          throw new HandleError('UNAUTHORIZED ERROR', err.message, 403);
-        }
+    ) as JwtPayload;
 
-        req.cookies.userId = decoded.data.userId;
-        req.cookies.email = decoded.data.email;
-      },
-    );
+    if (!decoded.data.userId || !decoded.data.email) {
+      throw new HandleError('UNAUTHORIZED ERROR', 'Invalid Token', 403);
+    }
 
+    req.user = { id: decoded.data.userId, email: decoded.data.email };
     next();
   } catch (e) {
     next(e);

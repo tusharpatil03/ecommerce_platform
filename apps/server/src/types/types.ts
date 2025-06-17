@@ -50,6 +50,6 @@ export const ProductInput = z.object({
   stock: z
     .number()
     .min(0, 'Stock must be a non-negative number')
-    .max(9999999999, 'Stock must be less than 10 billion')
+    .max(999, 'Stock must be less than 10 billion')
     .default(1),
 });

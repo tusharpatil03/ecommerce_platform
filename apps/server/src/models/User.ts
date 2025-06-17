@@ -1,8 +1,19 @@
-import mongoose from 'mongoose';
+import mongoose, { PopulatedDoc } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import { InterfaceProduct } from './Product';
 
-const Schema = mongoose.Schema;
+export interface InterfaceUser {
+  _id: mongoose.Schema.Types.ObjectId;
+  email: string;
+  password: string;
+  salt: string;
+  created_at?: Date;
+  token?: string;
+  token_version?: number;
+  products?: PopulatedDoc<InterfaceProduct & Document>[];
+}
 
-const userSchema = new Schema({
+const userSchema = new Schema<InterfaceUser>({
   email: {
     type: String,
     required: [true, 'Please enter your Email Id'],
@@ -35,6 +46,13 @@ const userSchema = new Schema({
     required: true,
     default: 0,
   },
+
+  products: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Product',
+    },
+  ],
 });
 
-export const User = mongoose.model('User', userSchema);
+export const User = model<InterfaceUser>('User', userSchema);

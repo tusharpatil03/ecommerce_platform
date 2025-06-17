@@ -1,5 +1,5 @@
 import { SignupInfo } from './signup';
-import { User } from '../../models/User';
+import { InterfaceUser, User } from '../../models/User';
 import HandleError from '../../utils/Error/Error';
 import {
   generateAccessToken,
@@ -13,9 +13,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   const data: SignupInfo = req.body;
 
   try {
-    const user = await User.findOne({
+    const user: InterfaceUser = (await User.findOne({
       email: data.email,
-    }).select('password');
+    })
+      .select('password')
+      .lean()) as InterfaceUser;
 
     if (!user) {
       throw new HandleError('USER NOT EXIST', 'user not found', 400);
@@ -32,7 +34,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     const JwtPayload: InterfaceJwtPayload = {
       email: data.email,
-      userId: user.id,
+      userId: user._id.toString(),
     };
 
     const accessToken = generateAccessToken(JwtPayload);
@@ -44,7 +46,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     await User.updateOne(
       {
-        id: user.id,
+        id: user._id,
       },
       {
         token: refreshToken,

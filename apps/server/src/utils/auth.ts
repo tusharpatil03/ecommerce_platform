@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '../globals';
+import { Types } from 'mongoose';
 
 export interface InterfaceJwtPayload {
   userId: string;
@@ -15,7 +16,7 @@ export const generateAccessToken = (payload: InterfaceJwtPayload): string => {
     },
     ACCESS_TOKEN_SECRET as string,
     {
-      expiresIn: 30 * 60 * 1000,
+      expiresIn: 30 * 60,
     },
   );
   return token;

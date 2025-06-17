@@ -1,8 +1,29 @@
-import mongoose from 'mongoose';
+import mongoose, { PopulatedDoc } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import { InterfaceUser } from './User';
 
-const Schema = mongoose.Schema;
+export interface InterfaceProduct {
+  _id: mongoose.Types.ObjectId;
+  key: string;
+  name: string;
+  description: string;
+  price: number;
+  rating?: number;
+  images: { public_id: string; url: string }[];
+  category?:
+    | 'electronics'
+    | 'clothing'
+    | 'wearings'
+    | 'food'
+    | 'beauty'
+    | 'mechanical'
+    | 'drinks'
+    | 'any';
+  stock?: number;
+  owner: PopulatedDoc<InterfaceUser & Document>;
+}
 
-const ProductShema = new Schema({
+const ProductShema = new Schema<InterfaceProduct>({
   key: {
     type: String,
     required: true,
@@ -57,14 +78,15 @@ const ProductShema = new Schema({
   },
   stock: {
     type: Number,
-    maxLength: 10,
+    min: 0,
+    max: 999,
     default: 1,
   },
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
 });
 
-export const Product = mongoose.model('Product', ProductShema);
+export const Product = model<InterfaceProduct>('Product', ProductShema);

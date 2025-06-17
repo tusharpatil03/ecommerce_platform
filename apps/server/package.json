@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "build": "tsc --build",
     "start": "node dist/app.js",
-    "dev": "nodemon --watch src --ext ts --ignore dist --exec ts-node src/app.ts",
+    "dev": "nodemon --watch src --ext ts --ignore dist --exec ts-node --project tsconfig.json src/app.ts",
     "clean": "rm -rf dist",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -41,6 +40,7 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.17.0",
     "mongoose": "^8.15.1",
     "zod": "^3.25.64"
   }

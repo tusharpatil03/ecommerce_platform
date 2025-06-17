@@ -3,7 +3,7 @@ import { hello } from '../controllers/user/index';
 import { signup } from '../controllers/user/signup';
 import { login } from '../controllers/user/login';
 import { validateData } from '../middlewares/inputValidator';
-import { AuthInput } from '../utils/types';
+import { AuthInput } from '../types/types';
 const router = Router();
 
 router.get('/hello', hello);
