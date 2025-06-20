@@ -53,3 +53,5 @@ export const ProductInput = z.object({
     .max(999, 'Stock must be less than 10 billion')
     .default(1),
 });
+
+export const UpdateProductInput = ProductInput.partial();

@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/axios": "^0.14.4",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
@@ -25,6 +26,7 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.15.30",
     "@types/supertest": "^6.0.3",
+    "axios": "^1.10.0",
     "jest": "^30.0.0",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.1",

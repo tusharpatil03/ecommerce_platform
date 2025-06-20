@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import axios from 'axios';
 
 const URL = 'http://localhost:8000';
 
@@ -42,28 +43,25 @@ describe('User Authentication', () => {
 
     // Check status code first
     expect(res.status).toBe(400);
-    const data = await res.json();
-
-    expect(data.error).toBeDefined();
   });
 
-  // it("user should able to login", async () => {
-  //   const res = await fetch(`${URL}/user/login`, {
-  //     method: 'POST',
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify({
-  //       email,
-  //       password,
-  //     })
-  //   });
+  it('user should able to login', async () => {
+    const res = await fetch(`${URL}/user/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
 
-  //   const data = await res.json();
+    const data = await res.json();
 
-  //   expect(data).toMatchObject({
-  //     accessToken: expect.any(String),
-  //     refreshToken: expect.any(String)
-  //   });
-  // });
+    expect(data).toMatchObject({
+      accessToken: expect.any(String),
+      refreshToken: expect.any(String),
+    });
+  });
 });

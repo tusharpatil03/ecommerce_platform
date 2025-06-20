@@ -6,20 +6,23 @@ import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 
 export default defineConfig([
   {
-    rules: {
-      "no-unused-vars": "off",
-    },
-    files: ["**/*.{js,mjs,cjs,ts}"],
-    plugins: { js },
-    extends: ["js/recommended"],
-  },
-  {
-    files: ["**/*.{js,mjs,cjs,ts}"],
+    ...js.configs.recommended[0],
+    files: ["**/*.{js,mjs,cjs}"],
+    plugins: { "@eslint/js": js },
     languageOptions: { globals: globals.browser },
   },
-  tseslint.configs.recommended,
   {
-    // Note: there should be no other properties in this object
+    ...tseslint.configs.recommended[0],
+    files: ["**/*.ts"],
+    plugins: { "@typescript-eslint": tseslint.plugin },
+    rules: {
+      ...tseslint.configs.recommended[0].rules,
+      "@typescript-eslint/no-explicit-any": "off",
+      "no-unused-vars": "off",
+    },
+    languageOptions: { parser: tseslint.parser },
+  },
+  {
     ignores: [
       "coverage",
       "**/public",

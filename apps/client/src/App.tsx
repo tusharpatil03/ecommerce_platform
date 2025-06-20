@@ -1,11 +1,8 @@
 import "./App.css";
+import SignUp from "./pages/signup";
 
 function App() {
-  return (
-    <>
-      <h1>Hello</h1>
-    </>
-  );
+  return <SignUp />;
 }
 
 export default App;
