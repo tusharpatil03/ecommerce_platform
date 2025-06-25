@@ -1,7 +1,14 @@
+import 'express';
+
 declare global {
   namespace Express {
     interface Request {
-      user?: { id: string; email: string }; // Example custom property
+      session?: {
+        userId: string;
+        email: string;
+        isAuth: boolean;
+        expired: boolean;
+      };
     }
   }
 }

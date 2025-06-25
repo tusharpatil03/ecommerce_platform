@@ -6,14 +6,14 @@ export const getAllProducts = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  if (!req.user) {
+  if (!req.session || !req.session.isAuth) {
     throw new HandleError(
       'UnAuthentication Error',
       'user is not authenticated',
       401,
     );
   }
-  const userId: string = req.user.id;
+  const userId: string = req.session.userId;
 
   const products: InterfaceProduct[] = (await Product.find({
     owner: userId,

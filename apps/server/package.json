@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc --build",
     "start": "node dist/app.js",
-    "dev": "nodemon --watch src --ext ts --ignore dist --exec ts-node --project tsconfig.json src/app.ts",
+    "dev": "nodemon --watch src --ext ts --ignore dist --exec \"ts-node --files --project tsconfig.json\" src/app.ts",
     "clean": "rm -rf dist",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

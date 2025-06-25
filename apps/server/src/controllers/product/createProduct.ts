@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import mongoose, { HydratedDocument, Types } from 'mongoose';
+import mongoose from 'mongoose';
 import { Product } from '../../models/Product';
 import { InterfaceUser, User } from '../../models/User';
 import HandleError from '../../utils/Error/Error';
@@ -9,7 +9,7 @@ export const createProduct = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  if (!req.user) {
+  if (!req.session || !req.session.isAuth) {
     throw new HandleError(
       'UNAUTHORIZED ERROR',
       'user is not authorized, missing user in request',
@@ -18,7 +18,7 @@ export const createProduct = async (
   }
 
   const user: InterfaceUser = (await User.findOne({
-    _id: req.user.id,
+    _id: req.session.userId,
   }).lean()) as InterfaceUser;
 
   if (!user) {

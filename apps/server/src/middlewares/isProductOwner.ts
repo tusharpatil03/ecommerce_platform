@@ -9,7 +9,14 @@ export const isProductOwner = async (
   next: NextFunction,
 ): Promise<void> => {
   const productId = req.params.id;
-  const userId = req.user?.id;
+  if (!req.session || !req.session.isAuth) {
+    throw new HandleError(
+      'UnAuthentication Error',
+      'user is not authenticated',
+      401,
+    );
+  }
+  const userId = req.session.userId;
 
   // if (!productId) {
   //     throw new HandleError("UNDEFINED ERROR", "Product ID not found in request, Please Provide Product Id", 400)
