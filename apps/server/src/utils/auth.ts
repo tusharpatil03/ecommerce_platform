@@ -4,11 +4,13 @@ import { Types } from 'mongoose';
 import { User } from '../models/User';
 import HandleError from './Error/Error';
 
-export interface InterfaceJwtPayload {
+export interface InterfaceAccessTokenPayload {
   userId: string;
   email: string;
 }
-export const generateAccessToken = (payload: InterfaceJwtPayload): string => {
+export const generateAccessToken = (
+  payload: InterfaceAccessTokenPayload,
+): string => {
   const token: string = jwt.sign(
     {
       data: {
@@ -24,12 +26,20 @@ export const generateAccessToken = (payload: InterfaceJwtPayload): string => {
   return token;
 };
 
-export const generateRefreshToken = (payload: InterfaceJwtPayload): string => {
+export interface InterfaceRefreshTokenPayload
+  extends InterfaceAccessTokenPayload {
+  token_version: number;
+}
+
+export const generateRefreshToken = (
+  payload: InterfaceRefreshTokenPayload,
+): string => {
   const token: string = jwt.sign(
     {
       data: {
         email: payload.email,
         userId: payload.userId,
+        token_version: payload.token_version,
       },
     },
     REFRESH_TOKEN_SECRET as string,

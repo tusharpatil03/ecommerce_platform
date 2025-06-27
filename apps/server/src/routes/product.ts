@@ -7,6 +7,7 @@ import { getProduct } from '../controllers/product/getProduct';
 import { ProductInput, UpdateProductInput } from '../types/types';
 import { updateProduct } from '../controllers/product/updateProduct';
 import { getAllProducts } from '../controllers/product/getAllProducts';
+import { removeProduct } from '../controllers/product/removeProduct';
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.put(
   updateProduct,
 );
 router.get('/', isAuth, getAllProducts);
+router.delete('/:id', isAuth, isProductOwner, removeProduct);
 
 export default router;

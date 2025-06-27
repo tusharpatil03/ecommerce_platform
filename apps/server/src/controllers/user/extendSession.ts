@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { REFRESH_TOKEN_SECRET } from '../../globals';
-import { generateAccessToken, InterfaceJwtPayload } from '../../utils/auth';
+import {
+  generateAccessToken,
+  InterfaceRefreshTokenPayload,
+  InterfaceAccessTokenPayload,
+} from '../../utils/auth';
 import { User } from '../../models/User';
 import HandleError from '../../utils/Error/Error';
 
@@ -18,7 +22,7 @@ export const extendSession = async (
     refreshToken,
     REFRESH_TOKEN_SECRET as string,
   ) as JwtPayload;
-  const data: InterfaceJwtPayload = decoded.data;
+  const data: InterfaceRefreshTokenPayload = decoded.data;
 
   if (!data || !data.userId || !data.email) {
     res.status(401).json({
@@ -32,7 +36,11 @@ export const extendSession = async (
     throw new HandleError('NOT_FOUND', 'user not found', 400);
   }
 
-  const jwtPayload: InterfaceJwtPayload = {
+  if (user.token_version !== data.token_version) {
+    throw new HandleError('INVALID_TOKEN', 'refresh token is not valid', 400);
+  }
+
+  const jwtPayload: InterfaceAccessTokenPayload = {
     userId: data.userId,
     email: data.email,
   };

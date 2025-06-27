@@ -4,7 +4,8 @@ import HandleError from '../../utils/Error/Error';
 import {
   generateAccessToken,
   generateRefreshToken,
-  InterfaceJwtPayload,
+  InterfaceAccessTokenPayload,
+  InterfaceRefreshTokenPayload,
 } from '../../utils/auth';
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
@@ -32,13 +33,19 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       throw new HandleError('Wrong Password', 'Incorrect Password', 400);
     }
 
-    const JwtPayload: InterfaceJwtPayload = {
+    const accessTokenPayload: InterfaceAccessTokenPayload = {
       email: data.email,
       userId: user._id.toString(),
     };
 
-    const accessToken = generateAccessToken(JwtPayload);
-    const refreshToken = generateRefreshToken(JwtPayload);
+    const refreshTokenPayload: InterfaceRefreshTokenPayload = {
+      email: data.email,
+      userId: user._id.toString(),
+      token_version: user.token_version || 0,
+    };
+
+    const accessToken = generateAccessToken(accessTokenPayload);
+    const refreshToken = generateRefreshToken(refreshTokenPayload);
 
     if (!accessToken || !refreshToken) {
       throw new HandleError('JWT ERROR', 'unable to create JWT tokens', 500);
