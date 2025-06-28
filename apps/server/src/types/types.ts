@@ -111,3 +111,16 @@ export const UpdateProductInput = z
       .optional(),
   })
   .strict();
+
+export const reviewSchema = z
+  .object({
+    comment: z
+      .string()
+      .min(1, 'Comment is required')
+      .max(200, 'Comment Exceed 200 characters'),
+    rating: z
+      .number()
+      .min(1, 'Rating must be at least 1')
+      .max(5, 'Rating must be at most 5'),
+  })
+  .strict();

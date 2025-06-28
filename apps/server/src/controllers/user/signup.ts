@@ -5,7 +5,8 @@ import HandleError from '../../utils/Error/Error';
 import {
   generateAccessToken,
   generateRefreshToken,
-  InterfaceJwtPayload,
+  InterfaceAccessTokenPayload,
+  InterfaceRefreshTokenPayload,
 } from '../../utils/auth';
 
 export type SignupInfo = {
@@ -39,13 +40,16 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     throw new HandleError('User Not Exist', 'Unable to Create User', 500);
   }
 
-  const JwtPayload: InterfaceJwtPayload = {
+  const JwtPayload: InterfaceAccessTokenPayload = {
     email: data.email,
     userId: user._id.toString(),
   };
 
   const accessToken = generateAccessToken(JwtPayload);
-  const refreshToken = generateRefreshToken(JwtPayload);
+  const refreshToken = generateRefreshToken({
+    ...JwtPayload,
+    token_version: user.token_version,
+  } as InterfaceRefreshTokenPayload);
 
   if (!accessToken || !refreshToken) {
     throw new HandleError('JWT ERROR', 'unable to create JWT tokens', 500);

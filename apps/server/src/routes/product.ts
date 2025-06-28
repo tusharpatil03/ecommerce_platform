@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import { createProduct } from '../controllers/product/createProduct';
 import { isAuth } from '../middlewares/isAuth';
 import { validateData } from '../middlewares/inputValidator';
@@ -8,6 +8,7 @@ import { ProductInput, UpdateProductInput } from '../types/types';
 import { updateProduct } from '../controllers/product/updateProduct';
 import { getAllProducts } from '../controllers/product/getAllProducts';
 import { removeProduct } from '../controllers/product/removeProduct';
+import reviewRouter from './review';
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.put(
 );
 router.get('/', isAuth, getAllProducts);
 router.delete('/:id', isAuth, isProductOwner, removeProduct);
+router.use('/review', reviewRouter);
 
 export default router;
